@@ -24,7 +24,7 @@
         I use an EC2 machine which has a new IP address at each start up. There is a RDS I need to access which is in a different VPC. So, I need to add my public IP to the security group associated with the RDS. You can do the following:
     <ol>
       <li>
-        Create the following 'update-ip.sh' script in your home directory:
+        Create the following 'update-ip.sh' bash script in your home directory:
         
         <pre>
         <code>
@@ -37,6 +37,22 @@
         </code>
         </pre>
         
+      </li>
+      <li>
+        Make sure it is executable:
+        <pre>
+          <code>
+            chmod +x update-ip.sh
+          </code>
+        </pre>
+      </li>
+      <li>
+        Run it:
+        <pre>
+          <code>
+            ./update-ip.sh
+          </code>
+        </pre>
       </li>
     </ol>    
         
