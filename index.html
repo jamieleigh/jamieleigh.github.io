@@ -44,10 +44,10 @@
         <li>
           Give the lambda function access to the following resources:
           <ul>
-            <li>Amazon CloudWatch Logs</li>
-            <li>Amazon EC2</li>
+            <li>Amazon CloudWatch Logs (Access Level- Limited:Write, Resource- arn:aws:logs:*:*:*)</li>
+            <li>Amazon EC2 (Access Level- Limited:Write, Resource- All resources)</li>
           </ul>
-          To do this you need to define a policy:
+          To do this you can define a policy:
           <ol>
             <li>
               Naviagte to the IAM console and click on Policies
@@ -56,28 +56,28 @@
               Create a new policy with the following definition (JSON):
               <pre>
                 <code>
-                  {
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Effect": "Allow",
-            "Action": [
-                "logs:CreateLogGroup",
-                "logs:CreateLogStream",
-                "logs:PutLogEvents"
-            ],
-            "Resource": "arn:aws:logs:*:*:*"
-        },
-        {
-            "Effect": "Allow",
-            "Action": [
-                "ec2:Start*",
-                "ec2:Stop*"
-            ],
-            "Resource": "*"
-        }
-    ]
-}
+    {
+        "Version": "2012-10-17",
+        "Statement": [
+            {
+                "Effect": "Allow",
+                "Action": [
+                    "logs:CreateLogGroup",
+                    "logs:CreateLogStream",
+                    "logs:PutLogEvents"
+                ],
+                "Resource": "arn:aws:logs:*:*:*"
+            },
+            {
+                "Effect": "Allow",
+                "Action": [
+                    "ec2:Start*",
+                    "ec2:Stop*"
+                ],
+                "Resource": "*"
+            }
+        ]
+    }
                 </code>
               </pre>
               
@@ -89,7 +89,7 @@
 
         </li>
         <li>
-          Add 'CloudWatch Events' as a trigger and then create the rule. My rule, to start the machine up every Monday morning, was defined as the following CRON job <code>cron(0 7 ? * MON *)</code>.
+          Add 'CloudWatch Events' as a trigger and then create the rule. My rule, to start the machine up every Monday morning, was defined as the following CRON job: <code>cron(0 7 ? * MON *)</code>.
         </li>
       </ol>
       </div>
