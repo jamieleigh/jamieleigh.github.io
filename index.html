@@ -15,7 +15,83 @@
     <div id="test-content">
       <div class="accordion_child">
         <h2>Some random notes from me to me.</h2>
-		<p>.</p>
+      </div>
+    </div>
+    <div id="test1-header" class="accordion_headings">Start an EC2 Machine using Lambda</div>
+    <div id="test1-content">
+      <div class="accordion_child">
+      I want my EC2 machine to start up automatically. This can be done using AWS Lambda:
+      <ol>
+        <li>
+          Navigate to AWS lambda and create a new function with Python 3.6 runtime, call it 'ec2-startup'.
+        </li>
+        <li>
+          Give the lambda function the following definition:
+          <pre>
+            <code>
+              import boto3
+              # Enter the region your instances are in. Include only the region without specifying Availability Zone; e.g., 'us-east-1'
+              region = 'eu-west-2'
+              # Enter your instances here: ex. ['X-XXXXXXXX', 'X-XXXXXXXX']
+              instances = ['i-xxxxxxxxxxxxxxxxx']
+
+              def lambda_handler(event, context):
+                  ec2 = boto3.client('ec2', region_name=region)
+                  ec2.start_instances(InstanceIds=instances)
+            </code>
+          </pre>
+        </li>
+        <li>
+          Give the lambda function access to the following resources:
+          <ul>
+            <li>Amazon CloudWatch Logs</li>
+            <li>Amazon EC2</li>
+          </ul>
+          To do this you need to define a policy:
+          <ol>
+            <li>
+              Naviagte to the IAM console and click on Policies
+            </li>
+            <li>
+              Create a new policy with the following definition (JSON):
+              <pre>
+                <code>
+                  {
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "logs:CreateLogGroup",
+                "logs:CreateLogStream",
+                "logs:PutLogEvents"
+            ],
+            "Resource": "arn:aws:logs:*:*:*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "ec2:Start*",
+                "ec2:Stop*"
+            ],
+            "Resource": "*"
+        }
+    ]
+}
+                </code>
+              </pre>
+              
+            </li>
+            <li>
+              Go back to AWS Lambda, and under 'Execution Role', create a new role, and assign it the policy you created in the previous step
+            </li>
+          </ol>
+
+        </li>
+        <li>
+          Add 'CloudWatch Events' as a trigger and then create the rule. My rule, to start the machine up every Monday morning, was defined as the following CRON job <code>cron(0 7 ? * MON *)</code>.
+        </li>
+      </ol>
       </div>
     </div>
     <div id="test1-header" class="accordion_headings">Update an Existing AWS Security Group with My New Public IP Address</div>
